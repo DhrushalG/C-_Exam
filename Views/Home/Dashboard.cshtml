@@ -1,0 +1,76 @@
+@model User
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between">
+        <Label class="h4">Dojo Activity Center</Label>
+        <div>
+            <Label class="mr-3">Welcome, @Model.Name</Label>
+            <a class="my-1" href="Logout">Log Out</a>
+        </div>
+    </div>
+    <hr>
+    <Table class="table table-striped">
+        <thead>
+            <th>Activity</th>
+            <th>Date & Time</th>
+            <th>Duration</th>
+            <th>Event Coordinator</th>
+            <th># of Participants</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            @{
+                foreach (GroupActivity w in @ViewBag.AllActivities)
+                {
+                    <tr>
+                        <td>
+                            <a class="btn btn-sm oultine-none" href="OneAct/@w.GroupActivityId">@w.Title</a>
+                            </td>
+                        <td>@w.Date.ToShortDateString() at @w.Time.ToShortTimeString()</td>
+                        @{
+                            int i = 0;
+                            foreach (Participant r in w.inGroup)
+                            {
+                                if (r.GroupActivityId == w.GroupActivityId)
+                                {
+                                    i++;
+                                }
+                            }
+                        }
+                        <td>@w.Duration</td>
+                        <td>@w.Coordinator</td>
+                        <td>@i</td>
+                        <td>
+                            @{
+                                if (w.Coordinator == @Model.Name)
+                                {
+                                    <a class="btn btn-sm oultine-none" href="deleteGActivity/@w.GroupActivityId">Delete</a>
+                                }
+                                else
+                                {
+                                    if (!Model.isParticipating.Any(s => s.GroupActivityId == w.GroupActivityId))
+                                    {
+                                        <form action="processJoin" method="post">
+                                            <input class="btn btn-sm oultine-none" type="submit" value="Join">
+                                            <input type="hidden" name="UserId" value="@Model.UserId">
+                                            <input type="hidden" name="GroupActivityId" value="@w.GroupActivityId">
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form action="processLeave" method="post">
+                                            <input class="btn btn-sm oultine-none" type="submit" value="Leave">
+                                            <input type="hidden" name="UserId" value="@Model.UserId">
+                                            <input type="hidden" name="GroupActivityId" value="@w.GroupActivityId">
+                                        </form>
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </Table>
+    <a class="btn btn-sm btn-info float-right" href="new">Add New Activity</a>
+</div>

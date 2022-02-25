@@ -1,0 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+namespace Exam_attempt1.Models
+{ 
+    // the MyContext class representing a session with our MySQL 
+    // database allowing us to query for or save data
+    public class MyContext : DbContext 
+    { 
+        public MyContext(DbContextOptions options) : base(options) { }
+        // the "Monsters" table name will come from the DbSet variable name
+        public DbSet<User> Users { get; set; }
+        public DbSet<GroupActivity> GroupActivities { get; set; }
+        public DbSet<Participant> Participants { get; set; }
+    }
+}

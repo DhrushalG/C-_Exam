@@ -1,0 +1,62 @@
+@model GroupActivity
+
+<div class="Container mt-5">
+    <div class="d-flex justify-content-between">
+        <Label class="h3">Dojo Activity Center</Label>
+        <div>
+            <a class="my-1 mx-5" href="/dashboard">Home</a>
+            <a class="my-1" href="Logout">Log Out</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between mt-3">
+        <Label class="h4"> @Model.Title</Label>
+        @{
+            if (@ViewBag.loggedIn.Name == @Model.Coordinator)
+            {
+                <a class="btn btn-sm oultine-none" href="/deleteGActivity/@Model.GroupActivityId">Delete</a>
+            }
+            else
+            {
+                if (Model.inGroup.Any(s => s.UserId == @ViewBag.loggedIn.UserId && s.GroupActivityId == @Model.GroupActivityId))
+                {
+                    <form action="/processLeave" method="post">
+                        <input class="btn btn-sm oultine-none" type="submit" value="Leave">
+                        <input type="hidden" name="UserId" value="@ViewBag.loggedIn.UserId">
+                        <input type="hidden" name="GroupActivityId" value="@Model.GroupActivityId">
+                    </form>
+                }
+                else
+                {
+                    <form action="/processJoin" method="post">
+                        <input class="btn btn-sm oultine-none" type="submit" value="Join">
+                        <input type="hidden" name="UserId" value="@ViewBag.loggedIn.UserId">
+                        <input type="hidden" name="GroupActivityId" value="@Model.GroupActivityId">
+                    </form>
+                }
+            }
+        }
+    </div>
+    <div class="container">
+        <Label class="mt-2">Event Coordinator: @Model.Coordinator</Label>
+        <br>
+        <Label class="mt-3">Description:</Label>
+        <br>
+        <p style="width: 50%;">@Model.Description</p>
+        <div class="container mt-3">
+            <Label>Participants</Label>
+            <ul class="">
+                @{
+                    foreach (Participant r in @Model.inGroup)
+                    {
+                        foreach (User u in @ViewBag.InGroup)
+                        {
+                            if (r.UserId == u.UserId && r.GroupActivityId == @Model.GroupActivityId)
+                            {
+                                <li>@u.Name</li>
+                            }
+                        }
+                    }
+                }
+            </ul>
+        </div>
+    </div>

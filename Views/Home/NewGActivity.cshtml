@@ -1,0 +1,53 @@
+@model GroupActivity
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between">
+        <Label class="h3">Dojo Activity Center</Label>
+        <div>
+            <a class="my-1 mx-5" href="/dashboard">Home</a>
+            <a class="my-1" href="Logout">Log Out</a>
+        </div>
+    </div>
+    <Label class="h4">Create an Activity</Label>
+    </div>
+    <form class="container" action="processGActivity" method="post">
+        <div class="d-flex">
+            <div class="mx-2">
+                <div class="form-group">
+                    <label for="Title">Title</label>
+                    <input asp-for="Title" class="form-control">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Date">Date</label>
+                    <input asp-for="Date" class="form-control">
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mx-2">
+                <div class="form-group">
+                    <label for="Time">Time</label>
+                    <input asp-for="Time" class="form-control">
+                    <span asp-validation-for="Time" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="DurationInt">Duration</label>
+                    <input name="DurationInt" asp-for="DurationInt" class="form-control">
+                    <select name="DurationVal" asp-for="DurationVal">
+                        <option name="DurationVal" asp-for="DurationVal" value="Minutes">Minutes</option>
+                        <option name="DurationVal" asp-for="DurationVal" value="Hours">Hours</option>
+                        <option name="DurationVal" asp-for="DurationVal" value="Days">Days</option>
+                    </select>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <input asp-for="Description" class="form-control">
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <input type="hidden" name="Coordinator" value="@ViewBag.loggedIn.Name">
+        <input type="submit" class="shadow-lg rounded" value="Create">
+    </form>
+</div>
